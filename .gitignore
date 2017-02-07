@@ -17,3 +17,4 @@ docs/_build/doctrees/
 junit-result.xml
 htmlcov/
 .coverage
+__pycache__/

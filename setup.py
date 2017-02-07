@@ -48,7 +48,7 @@ setup(
     license="Apache Software License",
     keywords="cache decorator",
     url="http://github.com/jealous/cachez",
-    py_modules=['cachez'],
+    py_modules=['cachez', 'cachez_test'],
     platforms=['any'],
     long_description=get_long_description(),
     classifiers=[

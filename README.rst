@@ -11,7 +11,7 @@ Cache Decorator
     :target: https://pypi.python.org/pypi/cachez
 
 
-VERSION: 0.1.0
+VERSION: 0.1.1
 
 Introduction
 ------------
@@ -31,7 +31,7 @@ And one function.
 Tested on python 2.7 and python 3.4.
 
 For quick start, check the tutorial section of this page.
-Check `test.py`_ for detail examples.
+Check `cachez_test.py`_ for detail examples.
 
 Installation
 ------------
@@ -111,4 +111,4 @@ Contact author:
 - Cedric Zhuang <jealous@163.com>
 
 .. _Apache License version 2: LICENSE.txt
-.. _test.py: test.py
+.. _cachez_test.py: cachez_test.py

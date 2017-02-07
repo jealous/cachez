@@ -3,14 +3,15 @@ python:
     - "2.7"
     - "3.4"
     - "3.5"
+    - "3.6"
     - "pypy"
 install:
     - pip install coveralls
     - pip install -r requirements.txt
     - pip install -r test-requirements.txt
 script:
-    - flake8 cachez.py test.py
-    - py.test --cov=cachez --junit-xml=junit-result.xml --cov-report term-missing test.py
+    - flake8 cachez.py cachez_test.py
+    - py.test --cov=cachez --junit-xml=junit-result.xml --cov-report term-missing cachez_test.py
 after_success:
     - coveralls
 notifications:
