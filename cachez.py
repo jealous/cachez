@@ -21,6 +21,7 @@ import functools
 import hashlib
 import logging
 import os
+import types
 import pickle
 import threading
 
@@ -34,11 +35,34 @@ log = logging.getLogger(__name__)
 
 
 def _cache_holder():
-    return defaultdict(lambda: {})
+    return defaultdict(dict)
+
+
+def _lock_factory():
+    return threading.Lock()
 
 
 def _cache_lock_holder():
-    return defaultdict(lambda: threading.Lock())
+    return defaultdict(_lock_factory)
+
+
+CACHE_PROP_NAME = '_self_cache_'
+LOCK_PROP_NAME = '_self_cache_lock_'
+
+
+def _get_state(obj):
+    d = dict(obj.__dict__)
+    if '__getstate__' in d:
+        del d['__getstate__']
+    for prop in (CACHE_PROP_NAME, LOCK_PROP_NAME):
+        if prop in d:
+            del d[prop]
+    return d
+
+
+def _patch_getstate(obj):
+    if not hasattr(obj, '__getstate__'):
+        obj.__getstate__ = types.MethodType(_get_state, obj)
 
 
 class Cache(object):
@@ -106,10 +130,10 @@ class Cache(object):
 
     @staticmethod
     def get_self_root_cache(the_self):
-        prop_name = '_self_cache_'
-        if not hasattr(the_self, prop_name):
-            setattr(the_self, prop_name, _cache_holder())
-        return getattr(the_self, prop_name)
+        _patch_getstate(the_self)
+        if not hasattr(the_self, CACHE_PROP_NAME):
+            setattr(the_self, CACHE_PROP_NAME, _cache_holder())
+        return getattr(the_self, CACHE_PROP_NAME)
 
     @classmethod
     def get_self_cache(cls, the_self, key):
@@ -118,10 +142,10 @@ class Cache(object):
 
     @staticmethod
     def get_self_cache_lock_map(the_self):
-        prop_name = '_self_cache_lock_'
-        if not hasattr(the_self, prop_name):
-            setattr(the_self, prop_name, _cache_lock_holder())
-        return getattr(the_self, prop_name)
+        _patch_getstate(the_self)
+        if not hasattr(the_self, LOCK_PROP_NAME):
+            setattr(the_self, LOCK_PROP_NAME, _cache_lock_holder())
+        return getattr(the_self, LOCK_PROP_NAME)
 
     @classmethod
     def get_self_cache_lock(cls, the_self, key):

@@ -15,6 +15,7 @@
 #    under the License.
 import os
 
+import pickle
 import time
 
 from cachez import cache, clear_cache, instance_cache, clear_instance_cache, \
@@ -201,6 +202,28 @@ class CacheTest(TestCase):
 
     def test_no_instance_clear_cache(self):
         assert_that(no_instance_1, raises(ValueError, 'not available'))
+
+    def test_pickle_unpickle(self):
+        self_a = SelfCacheA()
+        assert_that(self_a.add_base(99), equal_to(99))
+        self_a.base = 1
+        self_a_str = pickle.dumps(self_a)
+        self_a_new = pickle.loads(self_a_str)
+        assert_that(self_a_new.add_base(99), equal_to(100))
+
+    def test_pickle_raise(self):
+        class CacheC(object):
+            def __getstate__(self):
+                return self.__dict__
+
+            @instance_cache
+            def cache_instance(self):
+                return sum(range(100))
+
+        self_c = CacheC()
+        self_c.cache_instance()
+        assert_that(lambda: pickle.dumps(self_c),
+                    raises(Exception, "Can't pickle"))
 
 
 class PersistedDemo(object):

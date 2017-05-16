@@ -11,7 +11,7 @@ Cache Decorator
     :target: https://pypi.python.org/pypi/cachez
 
 
-VERSION: 0.1.1
+VERSION: 0.1.2
 
 Introduction
 ------------
@@ -109,6 +109,10 @@ https://github.com/jealous/cachez
 Contact author:
 
 - Cedric Zhuang <jealous@163.com>
+
+Contributors:
+
+- Ryan Liang <menglei.leung@gmail.com>
 
 .. _Apache License version 2: LICENSE.txt
 .. _cachez_test.py: cachez_test.py
